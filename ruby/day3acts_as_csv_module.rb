@@ -1,35 +1,40 @@
 #!/usr/bin/env ruby
 
-class ActAsCsv
+module ActAsCsv
+	
+	def self.included(base)
+		base.extend ClassMethods
+	end
 
-	def self.acts_as_csv
+	module ClassMethods
+		def act_as_csv
+			include InstanceMethods
+		end
+	end
 
-	define_method 'read' do
+	module InstanceMethods
+
+	def read
+		@csv_contents = []
 		file = File.new(self.class.to_s.downcase + '.txt')
 		@headers = file.gets.chomp.split(', ')
 
 		file.each do |row|
-			@result << row.chomp.split(', ')
+			@csv_contents << row.chomp.split(', ')
 		end
 	end
 
-	define_method "headers" do
-		@headers
-	end
+ 	attr_accessor :headers, :csv_contents
 
-	define_method "csv_contents" do
-		@result
-	end
-
-	define_method "initialize" do
-		@result = []
-		read
-	end
-    end
+ 	def initialize
+ 		read
+ 	end
+ 	end
 end
 
-class RubyCsv < ActAsCsv
-	acts_as_csv
+class RubyCsv #no inheritance
+	include ActAsCsv
+	act_as_csv
 end
 
 m = RubyCsv.new

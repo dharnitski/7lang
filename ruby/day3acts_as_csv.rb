@@ -1,8 +1,10 @@
 #!/usr/bin/env ruby
 
 class ActAsCsv
-	
-	def read
+
+	def self.acts_as_csv
+
+	define_method 'read' do
 		file = File.new(self.class.to_s.downcase + '.txt')
 		@headers = file.gets.chomp.split(', ')
 
@@ -11,22 +13,23 @@ class ActAsCsv
 		end
 	end
 
-	def headers
+	define_method "headers" do
 		@headers
 	end
 
-	def csv_contents
+	define_method "csv_contents" do
 		@result
 	end
 
-	def initialize
+	define_method "initialize" do
 		@result = []
 		read
 	end
+    end
 end
 
 class RubyCsv < ActAsCsv
-
+	acts_as_csv
 end
 
 m = RubyCsv.new
