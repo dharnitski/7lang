@@ -17,10 +17,10 @@ module ActAsCsv
 	def read
 		@csv_contents = []
 		file = File.new(self.class.to_s.downcase + '.txt')
-		@headers = file.gets.chomp.split(', ')
+		@headers = file.gets.chomp.split(',')
 
 		file.each do |row|
-			@csv_contents << row.chomp.split(', ')
+			@csv_contents << row.chomp.split(',')
 		end
 	end
 
